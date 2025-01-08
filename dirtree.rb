@@ -2,7 +2,11 @@
 class String
   # colorization
   def colorize(color_code)
-    "\e[#{color_code}m#{self}\e[0m"
+    if ($flag_plain)
+        return self
+    else
+        "\e[#{color_code}m#{self}\e[0m"
+    end
   end
 
   def red
@@ -32,26 +36,50 @@ end
 
 
 dir = nil
+flag_ascii = false
+$flag_dirs_only = false
+$flag_plain = false
 
-if ARGV.length > 0
-    # get the first argument
-    arg0 = ARGV[0]
-
-    # check if this argument is a valid directory
-    # if it is not a valid directory, return with an error message, else, store
-    
-    if (Dir.exist?(arg0))
-        dir = arg0
+ARGV.each do |arg|
+    if (arg == "/A")
+        flag_ascii = true
+    elsif (arg == "/D")
+        $flag_dirs_only = true
+    elsif (arg == "/P")
+        $flag_plain = true
     else
-        abort("Usage: #{File.basename($0, File.extname($0))} [dirname]")
+        if (Dir.exist?(arg))
+            dir = arg
+        else
+            abort("Usage: #{File.basename($0, File.extname($0))} [directory] [/D] [/A] [/P]\n\n   /D   Display only directories.\n   /A   Use ASCII instead of extended characters.\n   /P   Display plain output (no colors).")
+        end
     end
-    
-else
+end
+
+if (dir == nil)
     dir = "."
 end
 
+$sym_L = "└"
+$sym_T = "├"
+$sym_bar = "│"
+$sym_dash = "─"
+
+if (flag_ascii)
+    $sym_L = "+"
+    $sym_T = "|"
+    $sym_bar = "|"
+    $sym_dash = "-"
+end
+
+
 def printDirContent(dir, prefix = "")
     entries = Dir.entries(dir)
+    if ($flag_dirs_only)
+        entries = entries.select do |entry|
+            File.directory?(File.join(dir, entry))
+        end
+    end
     prevPrefix = prefix[0...-2]
     entries.each_with_index do |entry, index|
         if (!(entry == "." or entry == ".."))
@@ -60,18 +88,18 @@ def printDirContent(dir, prefix = "")
             # print prefix
             if (prefix != "")
                 if (index == entries.length - 1)
-                    print((prevPrefix + "+-").yellow)
+                    print((prevPrefix + $sym_L + $sym_dash).yellow)
                 else
-                    print((prevPrefix + "|-").yellow)
+                    print((prevPrefix + $sym_T + $sym_dash).yellow)
                 end
             end
             
             if (Dir.exist?(path))
                 puts (entry + "/").green
                 if (prefix != "" and index == entries.length - 1)
-                    printDirContent(path, prevPrefix + "  " + "| ")
+                    printDirContent(path, prevPrefix + "  " + $sym_bar + " ")
                 else
-                    printDirContent(path, prefix + "| ")
+                    printDirContent(path, prefix + $sym_bar + " ")
                 end
             else
                 puts entry
