@@ -18,10 +18,12 @@ A lightweight Ruby CLI tool that displays the contents of a specified directory 
    ruby dirtree.rb [directory_path]
 
 This will output a tree-like structure of the specified directory.
-Contributing
+
+## Contributing
 
 Contributions are welcome! Please feel free to submit a pull request or open an issue.
-License
+
+## License
 
 This project is licensed under the MIT License.
 
