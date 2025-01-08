@@ -1,11 +1,12 @@
 # dirtree
-Ruby CLI tool that list the content of a specified directory, displaying the structure using ASCII characters.
+A lightweight Ruby CLI tool that displays the contents of a specified directory in a tree-like structure.
 
 ## Features
 
-- Lists files and directories in a clear, tree-like structure.
-- Uses standard ASCII characters for maximum compatibility.
-- Easy to use and lightweight.
+- **Clear, tree-like structure**: Easily visualize the hierarchy of files and directories.  
+- **ASCII compatibility**: Use the `/A` flag for a tree view with standard ASCII characters, ensuring compatibility across all environments.  
+- **Directory-only view**: Use the `/D` flag to display only directories.  
+- **Plain text output**: Use the `/P` flag to disable color for a simpler, plain-text view. 
 
 ## Installation
 
@@ -24,4 +25,4 @@ License
 
 This project is licensed under the MIT License.
 
-Feel free to copy and customize this as needed. If you need any more assistance, just let me know! 😊
+Feel free to copy and customize this as needed. If you need any more assistance, just let me know!
